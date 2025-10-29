@@ -181,45 +181,51 @@ class Gazebo_Linefollow_Env(gazebo_env.GazeboEnv):
 
         # Set the rewards for your action
         if done:
-            reward = -200
+            reward = -250
             return state, reward, done, {}
+
+        offset = 0
+        if all(x == 0 for x in state):
+            offset = -100
 
         if action == 0:
             if state[4] == 1 or state[5] == 1:
-                reward = 4
+                reward = 20 + offset
+            elif state[3] == 1 or state[6] == 1:
+                reward = 10 + offset
             else:
-                reward = 1
+                reward = -10 + offset
             return state, reward, done, {}
 
-        if action == 1:
+        if action == 2:
             if state[9] == 1:
-                reward = 5
-            elif state[8] == 1:
-                reward = 4
-            elif state[7] == 1:
-                reward = 3
-            elif state[6] == 1:
-                reward = 2
-            elif state[5] == 1:
                 reward = 0
+            elif state[8] == 1:
+                reward = -1
+            elif state[7] == 1:
+                reward = -2
+            elif state[6] == 1:
+                reward = -4
+            elif state[5] == 1:
+                reward = -8
             else:
-                reward = -10
-            
+                reward = -50
+            reward -= offset
             return state, reward, done, {}
 
         if state[0] == 1:
-            reward = 5
-        elif state[1] == 1:
-            reward = 4
-        elif state[2] == 1:
-            reward = 3
-        elif state[3] == 1:
-            reward = 2
-        elif state[4] == 1:
             reward = 0
+        elif state[1] == 1:
+            reward = -1
+        elif state[2] == 1:
+            reward = -2
+        elif state[3] == 1:
+            reward = -4
+        elif state[4] == 1:
+            reward = -8
         else:
-            reward = -10
-
+            reward = -50
+        reward -= offset
         return state, reward, done, {}
 
     def reset(self):
